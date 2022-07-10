@@ -8,3 +8,18 @@ targetCompatibility = JavaVersion.VERSION_17
 dependencies {
     implementation 'com.google.guava:guava:31.1-jre'
 }
+
+// https://stackoverflow.com/questions/4871656/using-gradle-to-build-a-jar-with-dependencies
+jar {
+    manifest {
+        attributes('Main-Class': 'ru.otus.HelloOtus')
+    }
+    // Include the classpath from the dependencies
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+            // This help solve the issue with jar lunch
+            {
+                exclude "META-INF/*.SF"
+                exclude "META-INF/*.DSA"
+                exclude "META-INF/*.RSA"
+            }
+}
