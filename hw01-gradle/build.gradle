@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -8,6 +9,22 @@ targetCompatibility = JavaVersion.VERSION_17
 dependencies {
     implementation 'com.google.guava:guava:31.1-jre'
 }
+
+shadowJar {
+    println('shadow-jar')
+    archiveBaseName.set('gradleHelloWorld')
+    archiveVersion.set('0.1')
+    archiveClassifier.set('')
+    configurations = [
+            project.configurations.implementation,
+            project.configurations.runtimeOnly
+    ]
+    manifest {
+        attributes('Main-Class': 'ru.otus.HelloOtus')
+    }
+}
+
+tasks.build.dependsOn tasks.shadowJar
 
 // https://stackoverflow.com/questions/4871656/using-gradle-to-build-a-jar-with-dependencies
 jar {
